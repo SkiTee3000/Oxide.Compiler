@@ -17,7 +17,9 @@ namespace ObjectStream.IO
         where TRead : class
         where TWrite : class
     {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
         private readonly BinaryFormatter _binaryFormatter = new() { Binder = new BindChanger(), AssemblyFormat = FormatterAssemblyStyle.Simple };
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
         private readonly Stream _inStream;
         private readonly Stream _outStream;
 
