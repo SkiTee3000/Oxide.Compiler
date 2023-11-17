@@ -59,6 +59,7 @@ namespace Oxide.CompilerServices
             return data.Version switch
             {
                 CompilerLanguageVersion.Preview => Microsoft.CodeAnalysis.CSharp.LanguageVersion.Preview,
+                CompilerLanguageVersion.V12 => Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp12,
                 CompilerLanguageVersion.V11 => Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp11,
                 CompilerLanguageVersion.V10 => Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp10,
                 CompilerLanguageVersion.V9 => Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp9,
@@ -76,17 +77,20 @@ namespace Oxide.CompilerServices
 
         public static PortableExecutableReference? ResolveToReference(this ICompilerService? compiler, string assemblyName)
         {
-            if (string.IsNullOrWhiteSpace(assemblyName)) throw new ArgumentNullException(nameof(assemblyName));
+            if (string.IsNullOrWhiteSpace(assemblyName))
+                throw new ArgumentNullException(nameof(assemblyName));
 
             string path = Path.Combine(System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory(), assemblyName);
-            if (File.Exists(path)) return MetadataReference.CreateFromFile(path);
+            if (File.Exists(path))
+                return MetadataReference.CreateFromFile(path);
 
             string? env = Environment.GetEnvironmentVariable("OXIDE:Path:Libraries");
 
             if (!string.IsNullOrWhiteSpace(env))
             {
                 path = Path.Combine(env, assemblyName);
-                if (File.Exists(path)) return MetadataReference.CreateFromFile(path);
+                if (File.Exists(path))
+                    return MetadataReference.CreateFromFile(path);
             }
 
             return null;
@@ -98,7 +102,8 @@ namespace Oxide.CompilerServices
         [UnconditionalSuppressMessage("SingleFile", "IL3000:Avoid accessing Assembly file path when publishing as a single file", Justification = "<Pending>")]
         public static PortableExecutableReference? ToReference(this Assembly assembly)
         {
-            if (!string.IsNullOrWhiteSpace(assembly.Location)) return MetadataReference.CreateFromFile(assembly.Location);
+            if (!string.IsNullOrWhiteSpace(assembly.Location))
+                return MetadataReference.CreateFromFile(assembly.Location);
 
             AssemblyName name = assembly.GetName();
 
